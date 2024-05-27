@@ -1,9 +1,9 @@
 # Stage 1: Build the frontend
 FROM node:current as build-frontend
 WORKDIR /app/unihive-fe
-COPY /unihive-fe/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY unihive-fe/ ./
+COPY . ./
 RUN npm run build
 
 # Stage 2: Serve the frontend

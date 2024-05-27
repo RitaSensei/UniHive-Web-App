@@ -1,8 +1,8 @@
 # Stage 1: Build the backend
 FROM maven:3.8.3-openjdk-17 as build-backend
 WORKDIR /app/unihive-backend
-COPY /unihive-backend/pom.xml .
-COPY /unihive-backend/src ./src
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Prepare the final image
