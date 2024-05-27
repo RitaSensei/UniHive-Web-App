@@ -47,6 +47,11 @@ jobs:
         run: |
           docker cp $(docker create ${{ secrets.CI_REGISTRY_IMAGE }}-backend:${{ github.sha }}):/app build-artifacts/backend
 
+      - name: Copy Dockerfiles to build artifacts
+        run: |
+          cp unihive-fe/Dockerfile build-artifacts/frontend/
+          cp unihive-backend/Dockerfile build-artifacts/backend/
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -83,7 +88,7 @@ jobs:
 
       - name: Build and push Docker image to Heroku
         run: |
-          docker build -t registry.heroku.com/${{ secrets.HEROKU_FRONTEND_APP_NAME }}/web ./build-artifacts/frontend
+          docker build -t registry.heroku.com/${{ secrets.HEROKU_FRONTEND_APP_NAME }}/web -f build-artifacts/frontend/Dockerfile build-artifacts/frontend
           docker push registry.heroku.com/${{ secrets.HEROKU_FRONTEND_APP_NAME }}/web
 
       - name: Release Docker image to Heroku
@@ -121,7 +126,7 @@ jobs:
 
       - name: Build and push Docker image to Heroku
         run: |
-          docker build -t registry.heroku.com/${{ secrets.HEROKU_BACKEND_APP_NAME }}/web ./build-artifacts/backend
+          docker build -t registry.heroku.com/${{ secrets.HEROKU_BACKEND_APP_NAME }}/web -f build-artifacts/backend/Dockerfile build-artifacts/backend
           docker push registry.heroku.com/${{ secrets.HEROKU_BACKEND_APP_NAME }}/web
 
       - name: Release Docker image to Heroku
